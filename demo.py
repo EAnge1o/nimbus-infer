@@ -19,6 +19,7 @@ from __future__ import annotations
 import os
 
 from nimbus_infer.bench import cache_memory_report, cache_speedup
+from nimbus_infer.cli import configure_console_output
 from nimbus_infer.config import ModelConfig, llama_style
 from nimbus_infer.engine import Engine
 from nimbus_infer.quant import compression_ratio, quantize_params, size_bytes
@@ -40,6 +41,7 @@ def rule(title: str) -> None:
 
 
 def main() -> int:
+    configure_console_output()
     rule("1. byte-level BPE tokenizer (trained here, no downloads)")
     tokenizer = BPETokenizer.train(CORPUS, vocab_size=384)
     sample = "the engine caches keys and values"

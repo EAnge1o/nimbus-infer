@@ -14,6 +14,23 @@ from .sampling import SamplingParams
 from .tokenizer import BPETokenizer
 
 
+def configure_console_output() -> None:
+    """Make printing model output safe on consoles with a non-UTF-8 codec.
+
+    Generated text is arbitrary bytes decoded into text, so printing it on a
+    Windows console (cp1252) raises ``UnicodeEncodeError`` and kills the demo.
+    Replacing unencodable characters keeps the run going instead of crashing.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(errors="replace")
+        except ValueError:  # pragma: no cover - detached or closed stream
+            pass
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="nimbus-infer",
@@ -188,6 +205,7 @@ def _cmd_serve(args: argparse.Namespace) -> int:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
+    configure_console_output()
     args = _build_parser().parse_args(argv)
     dispatch = {
         "generate": _cmd_generate,
