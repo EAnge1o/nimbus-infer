@@ -1,0 +1,25 @@
+# byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# virtual environments
+.venv/
+venv/
+env/
+
+# checkpoints produced by demo / benchmarks
+checkpoints/
+*.safetensors
+*.npz
+
+# tooling
+.pytest_cache/
+.mypy_cache/
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
