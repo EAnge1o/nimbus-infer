@@ -80,36 +80,6 @@ print(engine.generate("The quick brown fox",
                       SamplingParams(max_new_tokens=32, temperature=0.0)))
 ```
 
-## 面试现场怎么演
-
-三步走，从"能动"到"好看"到"真能用"。
-
-**① 浏览器可视化 Demo（最抓眼球）**
-
-```bash
-python -m nimbus_infer serve --preset tiny --open     # 打开 http://127.0.0.1:8000/
-```
-
-页面里可以调 temperature / top-k / top-p / repetition penalty，点 Generate 就能看到 token **逐字流式**刷出来，右侧实时显示 tokens / tok/s / 耗时 / KV Cache 占用；点 "Show attention" 会画出**注意力热力图**（query × key 概率，按头平均）。
-
-**② 接入真实 GPT-2 权重（让输出变成真英文）**
-
-```bash
-python -m nimbus_infer convert --repo distilgpt2 --out checkpoints/distilgpt2
-python -m nimbus_infer serve --model checkpoints/distilgpt2 --open
-# 或者终端里直接聊：
-python -m nimbus_infer chat --model checkpoints/distilgpt2
-```
-
-> `convert` 会下载 HF 的 `config.json` + `model.safetensors` + `vocab.json` + `merges.txt`（distilgpt2 约 330 MB），用本引擎的 safetensors 解析器与权重映射转换，**全程不 import transformers**。已预下载的话用 `--local DIR` 离线转换。
-
-**③ 终端 REPL（展示 KV Cache 跨轮复用）**
-
-```bash
-python -m nimbus_infer chat --model checkpoints/demo-gpt2
-```
-
-每轮结束会打印 `tokens | tok/s | kv cache MB | context`；连问几轮可以看到 context 与缓存持续增长，且后续轮的 tok/s 更高——因为历史 token 已经在缓存里，无需重新 prefill。
 
 ## 支持的架构
 
