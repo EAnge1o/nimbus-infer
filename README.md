@@ -15,9 +15,11 @@
 
 *（GIF 由 `docs/make_demo_gif.py` 用真实命令输出渲染而成，不是录屏；演示权重是随机初始化的，所以生成文本是乱码——引擎本身是对的。）*
 
-## 为什么是它
+## 项目定位
 
-你的仓库已经有应用层的 AI 项目（RAG、智能体、面试陪练、学习助手），也有 `nimbus-vm` / `nimbus-git` / `nimbus-kv` 这些系统底座。这个仓库补齐的是 **AI 基础设施 / 推理系统** 这一类最容易被追问、也最能体现硬实力的方向：不是"调用"大模型，而是"造"大模型的运行时。
+本项目聚焦 **AI 基础设施 / 推理系统**：不是“调用”大模型，而是“造”大模型的运行时。分词、注意力、KV Cache、采样、权重解析、量化全部手写，唯一依赖是 NumPy。
+
+同系列的从零实现项目：[nimbus-vm](https://github.com/EAnge1o/nimbus-vm)、[nimbus-git](https://github.com/EAnge1o/nimbus-git)、[nimbus-kv](https://github.com/EAnge1o/nimbus-kv)。
 
 ## 功能特性
 
@@ -170,7 +172,7 @@ python -m unittest discover -s tests -t . -v
 | [llama.cpp](https://github.com/ggerganov/llama.cpp) | C++ | ✗ | ✓ | ✓ | LLaMA | GGUF | 无 |
 | **nimbus-infer** | **NumPy** | **✓** | **✓** | **✓** | **GPT-2 + LLaMA** | **int8/int4** | **NumPy** |
 
-## 竞赛答辩定位
+## 技术亮点
 
 - **技术深度**：手写因果注意力、RoPE、GQA、SwiGLU、KV Cache、字节级 BPE、safetensors 二进制解析、nibble 量化——没有一行来自现成框架。
 - **正确性可证**：KV Cache 与全量重算的一致性、注意力因果性、量化误差上界都有单测固化。

@@ -1,25 +1,25 @@
-# NimbusInfer 竞赛答辩材料
+# NimbusInfer 深度说明
 
 ## 一句话定位
 
 > 一个**只用 NumPy**、从零实现的大模型推理引擎：分词、注意力、KV Cache、权重解析、量化全部手写，同时支持 GPT-2 与 LLaMA 两代架构。
 
-## 为什么这个题目值得做
+## 题目定位
 
-大部分"AI 应用"项目都是调用现成模型 API / 框架。评委无法从一段 `model.generate()` 里看出参赛者是否理解 Transformer。本项目反过来，把**推理运行时**当作研究对象：证明参赛者能亲手实现注意力、位置编码、缓存、量化这些 AI 基础设施的核心机制。
+大部分"AI 应用"项目都是调用现成模型 API / 框架。读者无法从一段 `model.generate()` 里判断作者是否理解 Transformer。本项目反过来，把**推理运行时**当作研究对象：注意力、位置编码、缓存、量化这些 AI 基础设施的核心机制全部亲手实现。
 
-它与你仓库里其余项目的关系：`nimbus-vm` / `nimbus-git` / `nimbus-kv` 构成"从零实现"的系统底座，本项目补齐**AI 基础设施**这一块，形成完整的技术纵深画像。
+与同系列项目的关系：`nimbus-vm` / `nimbus-git` / `nimbus-kv` 构成"从零实现"的系统底座，本项目覆盖其中的 **AI 基础设施**。
 
 ## 创新点 / 技术深度
 
 1. **一套代码，两代架构**：`ModelConfig` 用标志位（`norm` / `activation` / `pos_encoding` / `n_kv_heads`）描述架构，GPT-2（LayerNorm+GELU+学习式位置+MHA）与 LLaMA（RMSNorm+SwiGLU+RoPE+GQA）共用同一个 `Transformer.forward`。
-2. **KV Cache 数值等价性可证**：测试断言"分块 prefill + 逐步 decode"的 logits 与"整段一次性前向"逐元素一致（`atol=1e-4`）。这是很多教学实现会含糊带过、但答辩最容易被追问的点。
+2. **KV Cache 数值等价性可证**：测试断言"分块 prefill + 逐步 decode"的 logits 与"整段一次性前向"逐元素一致（`atol=1e-4`）。这是很多教学实现会含糊带过、也最容易被忽略的点。
 3. **手写二进制格式解析**：自己解析 safetensors（`<uint64 头长度><JSON 头><原始缓冲>`），并处理 bfloat16 → float32 的位运算展宽；不依赖 `safetensors` 包。
 4. **真正的 4-bit 打包**：int4 权重偏置到 `[0,15]` 后每字节装两个（低半字节在前），`effective_bits()` 实测 ≈ 4.0，体积约为 int8 的一半（~7.5x vs float32）。
 5. **零框架依赖**：无 PyTorch / Transformers / tokenizers / safetensors，仅 NumPy 作为数值后端。
 6. **可演示、可真用**：浏览器可视化 Demo（SSE 流式 + 实时指标 + 注意力热力图）、终端 REPL（跨轮复用 KV Cache）、以及把真实 HuggingFace 权重（如 distilgpt2）转成本引擎格式的 `convert` 命令——三者都只用标准库。
 
-## 可验证性（答辩现场可复现的证据）
+## 可验证性（可现场复现的证据）
 
 ```bash
 # 1) 82 个单元测试全绿
@@ -53,7 +53,7 @@ python -m nimbus_infer chat --model checkpoints/demo-gpt2
 | `test_convert_local_directory_end_to_end` | HF 目录 → nimbus checkpoint → 可生成（离线端到端） |
 | `test_server.py` 全套 | 真实启动 HTTP 服务，`/api/stream` 有 token+done，`/api/attention` 返回方阵 |
 
-## 答辩演示脚本（建议顺序）
+## 演示脚本（建议顺序）
 
 ```bash
 python demo.py                         # 全流程，屏幕上逐段讲解
@@ -72,9 +72,9 @@ python -m nimbus_infer convert --repo distilgpt2 --out checkpoints/distilgpt2
 python -m nimbus_infer serve --model checkpoints/distilgpt2 --open
 ```
 
-## 常见追问与回答
+## 常见问题与回答
 
-**Q：你这不是"训练"了一个大模型吧？**
+**Q：这算"训练"了一个大模型吗？**
 对，本项目是**推理引擎**，权重可以是随机的、也可以是真实开源 weights。演示用的是随机初始化，所以输出是无意义的——这正是重点：全流程没有调用任何模型库。
 
 **Q：KV Cache 为什么能加速？**
@@ -90,7 +90,7 @@ MHA 每个 query 头有独立 K/V 头；GQA 让多个 query 头共享一个 K/V 
 `effective_bits()` 实测约 4.0 位/权重。`size_bytes()` 统计的是**打包后**的字节数，所以 int4 ≈ int8 的一半。误差上界由 `test_int4_error_within_half_scale` 固定为半个量化步长。
 
 **Q：可视化 Demo 为什么不用 Flask / FastAPI？**
-因为我给项目定的约束是"只依赖 NumPy"。Web 部分用标准库 `http.server` + Server-Sent Events，前端是一个内联 HTML，没有任何构建步骤——这也让"零框架依赖"这个卖点在 Demo 层同样成立。
+本项目的约束是"只依赖 NumPy"。Web 部分用标准库 `http.server` + Server-Sent Events，前端是一个内联 HTML，没有任何构建步骤——这也让"零框架依赖"这个特点在 Demo 层同样成立。
 
 **Q：`convert` 真的不 import transformers 吗？**
 是。它用 `urllib` 下载 `config.json` / `model.safetensors` / 词表文件，用本项目的 safetensors 解析器读二进制，再用 `convert_hf_gpt2` / `convert_hf_llama` 做命名映射与转置。测试 `test_convert_local_directory_end_to_end` 用一个离线的 HF 目录证明整条链路可用。
@@ -98,7 +98,7 @@ MHA 每个 query 头有独立 K/V 头；GQA 让多个 query 头共享一个 K/V 
 **Q：能不能跑真实的 LLaMA / GPT-2？**
 可以，`weights.convert_hf_llama` / `convert_hf_gpt2` 负责命名映射与转置；只要提供 HF 的 safetensors 与对应 `ModelConfig`，`Engine` 即可加载。
 
-## 局限与后续方向（显示你知道边界）
+## 局限与后续方向
 
 - 目前是**单序列**推理；批处理 / 连续批处理（continuous batching）是下一步。
 - 无 GPU 后端；`backend.py` 是唯一接触数组的地方，替换为 CuPy 即可上 GPU。
