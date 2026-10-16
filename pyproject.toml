@@ -9,7 +9,7 @@ description = "A from-scratch, NumPy-only LLM inference engine: byte-level BPE, 
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "WuxieLUK" }]
+authors = [{ name = "EAnge1o" }]
 keywords = ["llm", "inference", "transformer", "numpy", "kv-cache", "bpe", "from-scratch"]
 classifiers = [
     "Programming Language :: Python :: 3",

@@ -27,7 +27,7 @@ from .weights import convert_hf_gpt2, convert_hf_llama, read_safetensors
 HF_BASE = "https://huggingface.co"
 _WEIGHT_FILES = ("model.safetensors", "pytorch_model.safetensors")
 _TOKENIZER_FILES = ("vocab.json", "merges.txt")
-_USER_AGENT = "nimbus-infer/0.1 (+https://github.com/WuxieLUK/nimbus-infer)"
+_USER_AGENT = "nimbus-infer/0.1 (+https://github.com/EAnge1o/nimbus-infer)"
 
 
 # ---------------------------------------------------------------------------

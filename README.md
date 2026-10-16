@@ -1,6 +1,6 @@
 # NimbusInfer
 
-[![ci](https://github.com/WuxieLUK/nimbus-infer/actions/workflows/ci.yml/badge.svg)](https://github.com/WuxieLUK/nimbus-infer/actions/workflows/ci.yml)
+[![ci](https://github.com/EAnge1o/nimbus-infer/actions/workflows/ci.yml/badge.svg)](https://github.com/EAnge1o/nimbus-infer/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org/)
 [![Dependency](https://img.shields.io/badge/runtime%20deps-NumPy%20only-informational.svg)](https://numpy.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
