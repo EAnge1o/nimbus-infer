@@ -19,7 +19,7 @@
 
 本项目聚焦 **AI 基础设施 / 推理系统**：不是“调用”大模型，而是“造”大模型的运行时。分词、注意力、KV Cache、采样、权重解析、量化全部手写，唯一依赖是 NumPy。
 
-同系列的从零实现项目：[nimbus-vm](https://github.com/EAnge1o/nimbus-vm)、[nimbus-git](https://github.com/EAnge1o/nimbus-git)、[nimbus-kv](https://github.com/EAnge1o/nimbus-kv)。
+同系列的从零实现项目：**[nimbus-infer-rs](https://github.com/EAnge1o/nimbus-infer-rs)**（本引擎的 Rust 零依赖重写版：手写 AVX2/FMA 内核、int8/int4 流式量化推理，直接读取本仓库的 checkpoint，贪心生成逐 token 一致；gpt2-124M 上 int4 解码吞吐 +85%、内存 1/7.5）、[nimbus-vm](https://github.com/EAnge1o/nimbus-vm)、[nimbus-git](https://github.com/EAnge1o/nimbus-git)、[nimbus-kv](https://github.com/EAnge1o/nimbus-kv)。
 
 ## 功能特性
 
