@@ -21,6 +21,8 @@
 
 同系列的从零实现项目：**[nimbus-infer-rs](https://github.com/EAnge1o/nimbus-infer-rs)**（本引擎的 Rust 零依赖重写版：手写 AVX2/FMA 内核、int8/int4 流式量化推理，直接读取本仓库的 checkpoint，贪心生成逐 token 一致；gpt2-124M 上 int4 解码吞吐 +85%、内存 1/7.5）、[nimbus-vm](https://github.com/EAnge1o/nimbus-vm)、[nimbus-git](https://github.com/EAnge1o/nimbus-git)、[nimbus-kv](https://github.com/EAnge1o/nimbus-kv)。
 
+系列里面向**产品与工作流**的工具：**[tapedeck](https://github.com/EAnge1o/tapedeck)**（LLM Agent 飞行记录仪：录一次、离线免费重放、diff 漂移）与姊妹项目 **[mocktape](https://github.com/EAnge1o/mocktape)**（同款"磁带"隐喻用在 HTTP 层）。
+
 ## 功能特性
 
 - **字节级 BPE 分词器**：支持从零**训练**词表，也支持加载 HuggingFace 格式的 `vocab.json` + `merges.txt`；纯字节级，任何输入都能无损往返，无需 `<unk>`。
